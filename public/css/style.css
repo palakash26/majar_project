@@ -21,7 +21,7 @@ body {
 }
 
 .fa-compass {
-    color: #fe424d;
+    color: #e5d6d7;
     font-size: 2rem;
 }
 
@@ -103,7 +103,7 @@ body {
 
 .card-img-overlay:hover {
     opacity: 0.2;
-    background-color: white;
+    background-color:white;
 }
 
 /* new page */
@@ -141,4 +141,11 @@ body {
 #map {
     height: 300px;
     width: 100vh;
+}
+
+@media(max-width:990px) {
+    #map {
+        width: 220px;
+        height: 200px;
+    }
 }

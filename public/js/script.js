@@ -16,3 +16,10 @@
         }, false)
     })
 })()
+
+const serachInput = document.querySelector('[data-serach]');
+serachInput.addEventListener("input", e => {
+    const value = e.target.value
+    console.log(value);
+});
+

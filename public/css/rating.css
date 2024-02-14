@@ -206,3 +206,13 @@ screen and (min-resolution: 192dpi) {
     -webkit-transition: background-position .7s;
     transition: background-position .7s;
 }
+
+@media(max-width:768px){
+    .card-full{
+        width:100%;
+        background-color: antiquewhite;
+    }
+    .map{
+        width:100%;
+    }
+}

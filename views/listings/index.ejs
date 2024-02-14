@@ -7,14 +7,19 @@
         #filters {
             display: flex;
             flex-wrap: wrap;
+            /* flex-direction: row; */
+            /* justify-content: space-between; */
             align-items: center;
+            margin-right: 1rem;
         }
 
         .filter {
+            width: 10%;
             text-align: center;
-            margin-right: 1.2rem;
+            margin-right: 0.7rem;
             margin-top: 1.2rem;
             opacity: 0.7;
+            display: inline-block;
         }
 
         .filter:hover {
@@ -24,6 +29,7 @@
 
         .filter p {
             font-size: 0.9rem;
+            padding: 3px;
         }
 
         .tax-info {
@@ -39,84 +45,205 @@
             display: flex;
             align-items: center;
         }
+
+        .main {
+            /* width: 70%;
+            background-color: aqua;
+            overflow-x: auto;
+            overflow-y: hidden; */
+            gap: 3;
+        }
+
+        .swiper {
+            width: 70%;
+            height: 10%;
+            /* background-color: aqua; */
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .filter {
+            display: block;
+            width: 50%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width:576px) {
+            .container {
+                width: 625px !important;
+            }
+        }
+
+        .swiper-button-next {
+            background-color: aqua;
+            border-radius: 60%;
+            border: 2px solid black;
+            overflow: hidden;
+        }
+
+        @media(max-width:1200px) {
+            #filters {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .swiper {
+                width: 65%;
+                height: 10%;
+                /* background-color: aqua; */
+            }
+
+        }
+
+        @media(max-width:990px) {
+            .swiper-slide {
+                /* background-color: aqua; */
+                width: 100%;
+            }
+
+            .filter {
+                display: block;
+                width: 50%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .swiper {
+                width: 100%;
+                /* background-color: red; */
+                height: 10%;
+                /* background-color: aqua; */
+            }
+        }
+
+        @media(max-width:768) {
+            .swiper {
+                width: 100%;
+            }
+
+            .filter {
+                display: block;
+                width: 50%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
     </style>
 
-    <div id="filters">
-        <div class="filter">
-            <div><i class="fa-solid fa-fire"></i></div>
-            <p>Trending</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-bed"></i></div>
-            <p>Rooms</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain-city"></i></div>
-            <p>Iconic Cities</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain"></i></div>
-            <p>Mountain</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-brands fa-fort-awesome"></i></div>
-            <p>Castles</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-person-swimming"></i></div>
-            <p>Amazing Pools</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-campground"></i></div>
-            <p>Camping</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-cow"></i></div>
-            <p>Farms</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-regular fa-snowflake"></i></div>
-            <p>Arctic</p>
-        </div>
-        
-        
-
-
-        <div class="tax-toggle">
-            <div class="form-check-reverse form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                <label class="form-check-label" for="flexSwitchCheckDefault">Display Total after taxes</label>
-            </div>
-        </div>
-    </div>
-    <div class="row  row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3 ">
-        <% for(let listing of allListings){ %>
-            <a href="/listings/<%= listing._id %>" class="listing-link">
-                <div class="card listings-card col" style="width: 17rem;">
-                    <img class="card-img-top" src="<%= listing.image.url%>" alt="Card image cap"
-                        style="height: 16rem; width: 20rem;">
-                    <div class="card-img-overlay"></div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            <b>
-                                <%= listing.title%>
-                            </b><br>
-                            &#8377; <%= listing.price.toLocaleString("en-IN") %>/night
-                                <i class="tax-info">&nbsp; &nbsp; +18%GST</i>
-                        </p>
+    <body>
+        <div id="filters">
+            <div class="swiper mySwiper">
+                <div class="main swiper-wrapper">
+                    <div class="filter swiper-slide">
+                        <div class="first"><i class="fa-solid fa-fire"></i></div>
+                        <p>Trending</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-bed"></i></div>
+                        <p>Rooms</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-mountain-city"></i></div>
+                        <p>Iconic Cities</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-mountain"></i></div>
+                        <p>Mountain</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-brands fa-fort-awesome"></i></div>
+                        <p>Castles</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-person-swimming"></i></div>
+                        <p>Amazing Pools</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-campground"></i></div>
+                        <p>Camping</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-cow"></i></div>
+                        <p>Farms</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-regular fa-snowflake"></i></div>
+                        <p>Arctic</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-fire"></i></div>
+                        <p>Trending</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-bed"></i></div>
+                        <p>Rooms</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-fire"></i></div>
+                        <p>Trending</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-bed"></i></div>
+                        <p>Rooms</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-fire"></i></div>
+                        <p>Trending</p>
+                    </div>
+                    <div class="filter swiper-slide">
+                        <div><i class="fa-solid fa-bed"></i></div>
+                        <p>Rooms</p>
                     </div>
                 </div>
-            </a>
-            <%}%>
-    </div>
-    <!-- <ul>
+                <!-- <div class="swiper-button-next"></div> -->
+                <!-- <div class="swiper-button-prev"></div> -->
+            </div>
+            <div class="tax-toggle ">
+                <div class="form-check-reverse form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Display Total after taxes</label>
+                </div>
+            </div>
+        </div>
+        <div class="row  row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3 ">
+            <% for(let listing of allListings){ %>
+                <a href="/listings/<%= listing._id %>" class="listing-link">
+                    <div class="card listings-card col" style="width: 17rem;">
+                        <img class="card-img-top" src="<%= listing.image.url%>" alt="Card image cap"
+                            style="height: 16rem; width: 20rem;">
+                        <div class="card-img-overlay"></div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <b>
+                                    <%= listing.title%>
+                                </b><br>
+                                &#8377; <%= listing.price.toLocaleString("en-IN") %>/night
+                                    <i class="tax-info">&nbsp; &nbsp; +18%GST</i>
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                <%}%>
+        </div>
+        <!-- <ul>
             <% for(let listing of allListings){ %>
                 <li><a href="/listings/<%=listing._id %>">
                         <%= listing.title %>
                     </a></li>
+                color
                 <%}%>
         </ul> -->
-
+    </body>
     <script>
         let taxSwitch = document.getElementById("flexSwitchCheckDefault");
         taxSwitch.addEventListener("click", () => {
@@ -128,6 +255,25 @@
                     info.style.display = "none";
                 }
             }
+        });
+    </script>
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 7,
+            spaceBetween: 20,
+            freeMode: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
         });
     </script>
 
