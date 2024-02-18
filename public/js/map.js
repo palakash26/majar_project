@@ -1,9 +1,11 @@
 
 mapboxgl.accessToken = mapToken;
+
 const map = new mapboxgl.Map({
     container: 'map', // container ID
-    // center:listing.geometry.coordinates, // starting position [lng, lat]
-    center: (listing && listing.geometry && listing.geometry.coordinates) ? listing.geometry.coordinates : [0, 0],
+    style:"mapbox://styles/mapbox/streets-v12",
+    center:listing.geometry.coordinates, // starting position [lng, lat]
+    // center: (listing && listing.geometry && listing.geometry.coordinates) ? listing.geometry.coordinates : [0, 0],
     zoom: 9 // starting zoom
 });
 
