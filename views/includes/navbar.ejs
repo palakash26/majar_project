@@ -1,61 +1,93 @@
-<style>
-    .search-btn {
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wanderlust</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      .search-btn {
         background-color: #fe424d;
         color: aliceblue;
         border-radius: 25px;
-        padding: 0 1rem 0 1rem;
-    }
+        padding: 0 1rem;
+      }
 
-    .search-btn:hover {
-        background-color: #fe424d;
+      .search-btn:hover {
+        background-color: #e63946;
         color: aliceblue;
-    }
+      }
 
-    .search-btn i {
+      .search-btn i {
         display: inline;
         margin-right: 0.5rem;
-    }
+      }
 
-    .search-in {
+      .search-in {
         border-radius: 25px;
-        padding: 0.5rem 3rem 0.5rem 3rem;
+        padding: 0.5rem 3rem;
         font-size: 0.9rem;
-    }
-</style>
-
-<nav class="container-fluid navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid ">
-        <a class="navbar-brand" href="/listings"><img
-                src="https://static-00.iconduck.com/assets.00/airbnb-icon-1903x2048-3h4731uj.png" alt="logo"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
-            <span class="navbar-toggler-icon"></span>
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/listings">
+          <img
+            src="https://static-00.iconduck.com/assets.00/airbnb-icon-1903x2048-3h4731uj.png"
+            alt="logo"
+            style="height: 40px"
+          />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNavAltMarkup"
+        >
+          <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="/listings">Wanderlust</a>
-            </div>
-            <div class="navbar-nav ms-auto">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2 search-in" type="search" placeholder="Search description"
-                        data-serach>
-                    <button class="btn search-btn" type="submit"> <i class="fa-solid fa-magnifying-glass"></i>search
-                    </button>
-                </form>
-            </div>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/listings/new">Create new listings</a>
-
-                <% if (!currUser) { %>
-                    <a class="nav-link" href="/signup"><b>SignUp</b></a>
-                    <a class="nav-link" href="/login"><b>Login</b></a>
-                    <% } else { %>
-                        <!-- Add content for logged-in user if needed -->
-                        <%if(currUser) {%>
-                            <a class="nav-link" href="/logout"><b>LogOut</b></a>
-                            <% } %>
-                                <% } %>
-            </div>
-
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" href="/listings">Wanderlust</a>
+          </div>
+          <div class="navbar-nav ml-auto">
+            <form class="form-inline" role="search">
+              <input
+                class="form-control search-in mr-2"
+                type="search"
+                placeholder="Search description"
+                aria-label="Search"
+              />
+              <button class="btn search-btn" type="submit">
+                <i class="fas fa-search"></i> Search
+              </button>
+            </form>
+          </div>
+          <div class="navbar-nav ml-auto">
+            <a class="nav-link" href="/listings/new">Create new listings</a>
+            <!-- <p><%= currUser %></p> -->
+            <% if (!currUser) { %>
+            <a class="nav-link" href="/signup"><b>SignUp</b></a>
+            <a class="nav-link" href="/login"><b>Login</b></a>
+            <% } else { %>
+            <a class="nav-link" href="/logout"><b>LogOut</b></a>
+            <% } %>
+          </div>
         </div>
-    </div>
-</nav>
+      </div>
+    </nav>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
