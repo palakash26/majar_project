@@ -38,6 +38,7 @@ async function main() {
   await mongoose.connect(dbUrl);
 }
 
+const port = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
@@ -117,9 +118,9 @@ app.use("/", userRouter);
 
 // });
 
-// app.get("/", (req, res) => {
-//     res.send("Hello its is the webside");
-// })
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
 
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page not found!"));
@@ -131,6 +132,6 @@ app.use((err, req, res, next) => {
   // res.status(statusCode).send(message);
 });
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log("server is listening to port 3000");
 });

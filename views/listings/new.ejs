@@ -1,14 +1,16 @@
 <% layout("/layouts/boilerplate") %>
 
-    <body  >
+    <body>
         <div class="row mb-3">
             <div class="col-8 offset-2">
                 <br><br>
                 <h3>Create a New Listings</h3>
-                <form method="post" action="/listings"  class="needs-validation" novalidate enctype="multipart/form-data">
+                <form method="post" action="/listings" class="needs-validation" novalidate
+                    enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" placeholder="Add a catchy title" name="listing[title]" class="form-control" style="border: 1px solid rgb(14, 67, 14);">
+                        <input type="text" placeholder="Add a catchy title" name="listing[title]" class="form-control"
+                            style="border: 1px solid rgb(14, 67, 14);">
                         <div class="valid-feedback">
                             Title looks good!
                         </div>
@@ -16,11 +18,11 @@
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea type="text"  name="listing[description]"
-                            class="form-control" required style="border: 1px solid rgb(14, 67, 14);"></textarea>
-                            <div class="invalid-feedback">Please enter a short description</div>
+                        <textarea type="text" name="listing[description]" class="form-control" required
+                            style="border: 1px solid rgb(14, 67, 14);"></textarea>
+                        <div class="invalid-feedback">Please enter a short description</div>
                     </div>
-<!-- 
+                    <!-- 
                     <div class="mb-3">
                         <label for="image" class="form-label">Image</label>
                         <input type="text" placeholder="Enter image/URL" name="listing[image]" class="form-control" />
@@ -28,28 +30,47 @@
 
                     <div class="mb-3">
                         <label for="image" class="form-label">Upload Listing Image</label>
-                        <input type="file"  name="listing[image]" class="form-control" style="border: 1px solid rgb(14, 67, 14);"/>
+                        <input type="file" name="listing[image]" class="form-control"
+                            style="border: 1px solid rgb(14, 67, 14);" />
                     </div>
 
                     <div class="row">
                         <div class="mb-3 col-md-4">
                             <label for="price" class="form-label">Price</label>
-                            <input placeholder="Enter Price" name="listing[price]" class="form-control" required style="border: 1px solid rgb(14, 67, 14);"/>
+                            <input placeholder="Enter Price" name="listing[price]" class="form-control" required
+                                style="border: 1px solid rgb(14, 67, 14);" />
                             <div class="invalid-feedback">Please enter a Price!</div>
                         </div>
 
                         <div class="mb-3 col-md-8">
                             <label for="country" class="form-label">Country</label>
-                            <input type="text" placeholder="Enter country" name="listing[country]"
-                                class="form-control" required style="border: 1px solid rgb(14, 67, 14);"/>
-                                <div class="invalid-feedback">Please enter a valid country.</div>
+                            <input type="text" placeholder="Enter country" name="listing[country]" class="form-control"
+                                required style="border: 1px solid rgb(14, 67, 14);" />
+                            <div class="invalid-feedback">Please enter a valid country.</div>
                         </div>
                     </div>
 
                     <div class="mb-3 ">
                         <label for="location" class="form-label">Location</label>
-                        <input type="text" placeholder="Enter location" name="listing[location]" class="form-control"  required style="border: 1px solid rgb(14, 67, 14);"/>
+                        <input type="text" placeholder="Enter location" name="listing[location]" class="form-control"
+                            required style="border: 1px solid rgb(14, 67, 14);" />
                         <div class="invalid-feedback">Please enter a valid location</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select name="listing[category]" class="form-control"
+                            style="border: 1px solid rgb(14, 67, 14);">
+                            <option value="Trending">Trending</option>
+                            <option value="Rooms">Rooms</option>
+                            <option value="Iconic Cities">Iconic Cities</option>
+                            <option value="Mountain">Mountain</option>
+                            <option value="Castles">Castles</option>
+                            <option value="Amazing Pools">Amazing Pools</option>
+                            <option value="Camping">Camping</option>
+                            <option value="Farms">Farms</option>
+                            <option value="Arctic">Arctic</option>
+                        </select>
                     </div>
 
 

@@ -4,8 +4,34 @@ const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports.index = async (req, res) => {
-    const allListings = await Listing.find({});
-    res.render("listings/index.ejs", { allListings });
+    try {
+        let { category, q } = req.query;
+        console.log("Index Route - Category:", category, "Search Query:", q);
+        let allListings;
+        let filterCategory = category;
+
+        if (category && category !== "undefined" && category !== "All") {
+            allListings = await Listing.find({ category: category });
+        } else if (q) {
+            allListings = await Listing.find({
+                $or: [
+                    { title: { $regex: q, $options: "i" } },
+                    { category: { $regex: q, $options: "i" } },
+                    { location: { $regex: q, $options: "i" } }
+                ]
+            });
+            filterCategory = `Search: ${q}`;
+        } else {
+            allListings = await Listing.find({});
+            filterCategory = "All";
+        }
+        console.log("Listings found:", allListings.length);
+        res.render("listings/index.ejs", { allListings, category: filterCategory });
+    } catch (err) {
+        console.error("Error in listings index:", err);
+        req.flash("error", "Failed to load listings. Please try again.");
+        res.redirect("/listings");
+    }
 };
 
 module.exports.renderNewForm = (req, res) => {
@@ -29,15 +55,15 @@ module.exports.showListing = async (req, res) => {
 
 module.exports.createListing = async (req, res, next) => {
 
-        let response = await geocodingClient
-            .forwardGeocode({
-                query: req.body.listing.location,
-                limit: 1,
-            })
-            .send();
+    let response = await geocodingClient
+        .forwardGeocode({
+            query: req.body.listing.location,
+            limit: 1,
+        })
+        .send();
 
-        // console.log(response.body.features[0].geometry);
-        // res.send("done!");
+    // console.log(response.body.features[0].geometry);
+    // res.send("done!");
 
 
 
