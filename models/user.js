@@ -7,11 +7,11 @@ const userSchema = new Schema({
         type: String,
         require: true,
     },
-    password:{
-        type:String,
-        require: true,
-    }
-})
+    wishlist: [{
+        type: Schema.Types.ObjectId,
+        ref: "Listing"
+    }]
+});
 
 userSchema.plugin(passportLocalMongoose);
 

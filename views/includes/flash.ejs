@@ -1,14 +1,33 @@
 <% if(success && success.length) {%>
-<div  class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
-    <%= success %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+  <div class="custom-toast-wrapper">
+    <div class="alert custom-toast alert-success alert-dismissible fade show d-flex align-items-center shadow-lg border-0" role="alert">
+      <div class="toast-icon-box bg-success-subtle text-success me-3">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div class="toast-content me-3">
+        <strong class="d-block text-dark fw-bold" style="font-size: 0.85rem; line-height: 1.1;">Success</strong>
+        <span class="text-secondary small"><%= success %></span>
+      </div>
+      <button type="button" class="btn-toast-close ms-auto" data-bs-dismiss="alert" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
 <% } %>
 
-<!-- error flash -->
 <% if(error && error.length) {%>
-    <div  class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
-        <%= error %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <div class="custom-toast-wrapper">
+    <div class="alert custom-toast alert-danger alert-dismissible fade show d-flex align-items-center shadow-lg border-0" role="alert">
+      <div class="toast-icon-box bg-danger-subtle text-danger me-3">
+        <i class="fa-solid fa-circle-exclamation"></i>
+      </div>
+      <div class="toast-content me-3">
+        <strong class="d-block text-dark fw-bold" style="font-size: 0.85rem; line-height: 1.1;">Notice</strong>
+        <span class="text-secondary small"><%= error %></span>
+      </div>
+      <button type="button" class="btn-toast-close ms-auto" data-bs-dismiss="alert" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
-    <% } %>
+  </div>
+<% } %>

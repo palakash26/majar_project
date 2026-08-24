@@ -1,17 +1,25 @@
 const Listing = require("../models/listing.js");
+const User = require("../models/user.js");
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports.index = async (req, res) => {
     try {
-        let { category, q } = req.query;
-        console.log("Index Route - Category:", category, "Search Query:", q);
+        let { category, q, filter } = req.query;
+        console.log("Index Route - Category:", category, "Search Query:", q, "Filter:", filter);
         let allListings;
-        let filterCategory = category;
+        let filterCategory = category || "All";
 
-        if (category && category !== "undefined" && category !== "All") {
-            allListings = await Listing.find({ category: category });
+        if (filter === "mylistings" && req.user) {
+            allListings = await Listing.find({ owner: req.user._id }).populate("reviews");
+            filterCategory = "My Created Listings";
+        } else if (filter === "liked" && req.user) {
+            let user = await User.findById(req.user._id);
+            allListings = await Listing.find({ _id: { $in: (user && user.wishlist) ? user.wishlist : [] } }).populate("reviews");
+            filterCategory = "My Saved Stays";
+        } else if (category && category !== "undefined" && category !== "All") {
+            allListings = await Listing.find({ category: category }).populate("reviews");
         } else if (q) {
             allListings = await Listing.find({
                 $or: [
@@ -19,10 +27,10 @@ module.exports.index = async (req, res) => {
                     { category: { $regex: q, $options: "i" } },
                     { location: { $regex: q, $options: "i" } }
                 ]
-            });
+            }).populate("reviews");
             filterCategory = `Search: ${q}`;
         } else {
-            allListings = await Listing.find({});
+            allListings = await Listing.find({}).populate("reviews");
             filterCategory = "All";
         }
         console.log("Listings found:", allListings.length);
@@ -105,15 +113,35 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateListing = async (req, res) => {
     try {
-        const { id } = req.params; // Extracting id from request parameters
-        let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+        const { id } = req.params;
+        let listing = await Listing.findById(id);
+
+        if (req.body.listing) {
+            Object.assign(listing, req.body.listing);
+        }
+
+        if (req.body.listing && (req.body.listing.location || req.body.listing.country)) {
+            try {
+                let response = await geocodingClient.forwardGeocode({
+                    query: `${req.body.listing.location}, ${req.body.listing.country}`,
+                    limit: 1
+                }).send();
+
+                if (response.body.features && response.body.features.length) {
+                    listing.geometry = response.body.features[0].geometry;
+                }
+            } catch (geoErr) {
+                console.error("Mapbox geocoding error on update:", geoErr);
+            }
+        }
 
         if (typeof req.file !== "undefined") {
             let url = req.file.path;
             let filename = req.file.filename;
             listing.image = { url, filename };
-            await listing.save();
         }
+
+        await listing.save();
         req.flash("success", "Listing Updated!");
         res.redirect(`/listings/${id}`);
     } catch (error) {

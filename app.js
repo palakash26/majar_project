@@ -15,6 +15,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const Listing = require("./models/listing.js");
 
 const { render } = require("ejs");
 const { writeSync } = require("fs");
@@ -22,9 +23,10 @@ const { writeSync } = require("fs");
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const pageRouter = require("./routes/page.js");
 
-const dbUrl = process.env.ATLASDB_URL;
-// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
+
 
 main()
   .then(() => {
@@ -42,6 +44,7 @@ const port = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
@@ -80,13 +83,26 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req, res, next) => {
-  console.log("req.user:", req.user);
+app.use(async (req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
-  console.log("User", req.user);
   res.locals.currUser = req.user;
-  console.log("res.locals.currUser:", res.locals.currUser);
+  res.locals.userListingsCount = 0;
+  res.locals.userWishlistCount = 0;
+  res.locals.userWishlist = [];
+
+  if (req.user) {
+    try {
+      res.locals.userListingsCount = await Listing.countDocuments({ owner: req.user._id });
+      let freshUser = await User.findById(req.user._id);
+      if (freshUser && freshUser.wishlist) {
+        res.locals.userWishlist = freshUser.wishlist.map(id => id.toString());
+        res.locals.userWishlistCount = freshUser.wishlist.length;
+      }
+    } catch (e) {
+      console.log("Error loading user profile stats:", e);
+    }
+  }
   next();
 });
 
@@ -99,24 +115,21 @@ app.use("/demopas", async (req, res) => {
   res.send(registerUser);
 });
 
+const initKeepAliveCron = require("./utils/keepAliveCron.js");
+
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
+app.use("/", pageRouter);
 
-//
-// app.get("/testListing",async (req, res) => {
-//     let sampleListing = new Listing({
-//         title: "My new valia",
-//         description: "By the beach",
-//         price: 1200,
-//         location: "Calangut,Goa",
-//         country: "India"
-//     })
-//     await sampleListing.save();
-//     console.log("sample was saved");
-//     res.send("succefull run!");
-
-// });
+// Health check / Keep-alive ping route for cron job
+app.get("/ping", (req, res) => {
+  res.status(200).json({
+    status: "active",
+    message: "Server is awake and active!",
+    timestamp: new Date().toISOString()
+  });
+});
 
 app.get("/", (req, res) => {
   res.redirect("/listings");
@@ -133,5 +146,8 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log("server is listening to port 3000");
+  console.log(`Server is listening to port ${port}`);
+  initKeepAliveCron(port);
 });
+
+

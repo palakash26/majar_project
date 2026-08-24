@@ -1,0 +1,132 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+      <div class="card border-0 shadow-lg rounded-5 overflow-hidden p-4 p-md-5 bg-white">
+        <!-- Header -->
+        <div class="text-center mb-4">
+          <div class="icon-circle bg-danger-subtle text-danger mx-auto mb-3 d-flex align-items-center justify-content-center rounded-circle" style="width: 76px; height: 76px; font-size: 2rem;">
+            <i class="fa-solid fa-paper-plane"></i>
+          </div>
+          <h2 class="fw-extrabold text-dark mb-1">Real-Time Email Dispatch</h2>
+          <p class="text-muted small mb-0">Send instant messages directly to any email address with custom subject and body text.</p>
+        </div>
+
+        <!-- Real-time Email Dispatch Form -->
+        <form id="realtime-email-form" onsubmit="dispatchRealtimeEmail(event)">
+          <div class="mb-3">
+            <label for="email-to" class="form-label fw-bold text-dark small mb-1">
+              <i class="fa-solid fa-envelope me-1 text-danger"></i> Recipient Email Address
+            </label>
+            <input 
+              type="email" 
+              class="form-control rounded-3 py-25 px-3 bg-light border-1" 
+              id="email-to" 
+              placeholder="e.g. guest@example.com" 
+              value="<%= currUser ? currUser.email : '' %>"
+              required 
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="email-subject" class="form-label fw-bold text-dark small mb-1">
+              <i class="fa-solid fa-heading me-1 text-primary"></i> Email Subject
+            </label>
+            <input 
+              type="text" 
+              class="form-control rounded-3 py-25 px-3 bg-light border-1" 
+              id="email-subject" 
+              placeholder="e.g. Booking Inquiry / Concierge Special Offer" 
+              required 
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="email-body" class="form-label fw-bold text-dark small mb-1">
+              <i class="fa-solid fa-align-left me-1 text-success"></i> Email Body Text
+            </label>
+            <textarea 
+              class="form-control rounded-3 py-25 px-3 bg-light border-1" 
+              id="email-body" 
+              rows="5" 
+              placeholder="Write your custom email content here..." 
+              required
+            ></textarea>
+          </div>
+
+          <!-- Live Email Preview Box -->
+          <div class="p-3 bg-light rounded-4 border mb-4">
+            <span class="badge bg-secondary text-white mb-2" style="font-size: 0.7rem;">Live Message Preview</span>
+            <div class="small text-dark">
+              <strong>To:</strong> <span id="preview-to" class="text-muted">guest@example.com</span><br>
+              <strong>Subject:</strong> <span id="preview-subject" class="text-muted">(No subject entered)</span>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="send-mail-btn" class="btn btn-danger-custom w-100 rounded-pill py-3 fw-bold shadow">
+            <i class="fa-solid fa-paper-plane me-2"></i> Dispatch Email Real-Time
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Live Email Preview binding
+  const toInput = document.getElementById("email-to");
+  const subjectInput = document.getElementById("email-subject");
+  const previewTo = document.getElementById("preview-to");
+  const previewSubject = document.getElementById("preview-subject");
+
+  toInput.addEventListener("input", () => {
+    previewTo.textContent = toInput.value.trim() || "guest@example.com";
+  });
+
+  subjectInput.addEventListener("input", () => {
+    previewSubject.textContent = subjectInput.value.trim() || "(No subject entered)";
+  });
+
+  async function dispatchRealtimeEmail(event) {
+    event.preventDefault();
+    const btn = document.getElementById("send-mail-btn");
+    const to = toInput.value.trim();
+    const subject = subjectInput.value.trim();
+    const body = document.getElementById("email-body").value.trim();
+
+    if (!to || !subject || !body) {
+      showCustomToast("Please complete all email fields.", "error");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Sending Email...`;
+
+    try {
+      const res = await fetch("/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to, subject, body })
+      });
+      const data = await res.json();
+
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-paper-plane me-2"></i> Dispatch Email Real-Time`;
+
+      if (data.success) {
+        showCustomToast(data.message, "success");
+        if (data.previewUrl) {
+          console.log("Real-time email sandbox preview URL:", data.previewUrl);
+        }
+      } else {
+        showCustomToast(data.message, "error");
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-paper-plane me-2"></i> Dispatch Email Real-Time`;
+      showCustomToast("Error connecting to real-time mail server.", "error");
+    }
+  }
+</script>

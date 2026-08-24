@@ -1,206 +1,442 @@
 <% layout("/layouts/boilerplate") %>
-  <style>
-    .listing-link {
-      display: flex;
-    }
+<style>
+  #filters-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0 1rem 0;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
 
-    #filters {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: center;
-      margin-top: 1rem;
-      overflow-x: visible;
-    }
+  .swiper {
+    flex: 1 1 0%;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
 
-    .filter {
-      text-align: center;
-      margin-top: 1rem;
-      opacity: 0.7;
-      transition: 0.2s;
-      width: auto !important;
-      /* Allow width to be determined by content */
-      padding: 0 10px;
-    }
+  .filter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.8rem;
+    color: #717171;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
 
-    .filter:hover {
-      opacity: 1;
-      cursor: pointer;
-      border-bottom: 2px solid black;
-    }
+  .filter-item:hover {
+    color: #222222;
+    border-bottom-color: #dddddd;
+  }
 
-    .filter.active {
-      opacity: 1;
-      border-bottom: 2px solid black;
-    }
+  .filter-item.active {
+    color: #fe424d;
+    border-bottom-color: #fe424d;
+    font-weight: 600;
+  }
 
-    .filter p {
-      font-size: 0.8rem;
-      margin-top: 0.5rem;
-    }
+  .filter-item i {
+    font-size: 1.35rem;
+    margin-bottom: 0.3rem;
+  }
 
-    .swiper {
-      width: 75%;
-      margin-left: 0;
-      margin-right: 0;
-    }
+  .filter-item p {
+    font-size: 0.78rem;
+    margin: 0;
+    white-space: nowrap;
+  }
 
-    .swiper-slide {
-      display: flex;
+  .tax-toggle-box {
+    border: 1px solid #dddddd;
+    border-radius: 30px;
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .tax-toggle-box:hover {
+    border-color: #b0b0b0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .tax-info {
+    display: none;
+  }
+
+  /* Listing Card Premium Design */
+  .listing-card-wrapper {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .listing-home-card {
+    border: none;
+    border-radius: 1.25rem;
+    background: #ffffff;
+    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    overflow: hidden;
+  }
+
+  .listing-home-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 18.5rem;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background-color: #f0f0f0;
+  }
+
+  .card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .listing-home-card:hover .card-img-wrapper img {
+    transform: scale(1.05);
+  }
+
+  .wishlist-heart-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
+    border: none;
+    color: #ffffff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    z-index: 2;
+  }
+
+  .wishlist-heart-btn:hover {
+    background: #ffffff;
+    transform: scale(1.1);
+  }
+
+  .rating-pill {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #222222;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-details {
+    padding: 0.75rem 0.25rem 0.25rem 0.25rem;
+  }
+
+  .card-title-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #222222;
+    margin-bottom: 0.15rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-subtitle-text {
+    font-size: 0.85rem;
+    color: #717171;
+    margin-bottom: 0.4rem;
+  }
+
+  .card-price-text {
+    font-size: 0.95rem;
+    color: #222222;
+  }
+
+  @media (max-width: 992px) {
+    #filters-container {
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      align-items: stretch;
     }
-
-    .tax-toggle {
-      border: 1px solid rgba(0, 0, 0, 0.2);
-      border-radius: 12px;
-      height: 3.5rem;
-      padding: 0 1rem;
-      display: flex;
-      align-items: center;
-      margin-left: auto;
-      white-space: nowrap;
+    .tax-toggle-box {
+      width: 100%;
+      justify-content: space-between;
     }
+  }
+</style>
 
-    .tax-info {
-      display: none;
-    }
-
-    @media (max-width: 992px) {
-      .swiper {
-        width: 100%;
-        margin-bottom: 1rem;
-      }
-
-      #filters {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .tax-toggle {
-        margin-left: 0;
-        width: 100%;
-        justify-content: space-between;
-      }
-    }
-  </style>
-
-  <body>
-    <div class="container-fluid mt-3 mb-2">
-      <div id="filters">
-        <div class="swiper mySwiper">
-          <div class="swiper-wrapper">
-            <div class="filter swiper-slide <%= category === 'Trending' ? 'active' : '' %>"
-              onclick="window.location.href='/listings?category=Trending'">
-              <i class="fa-solid fa-fire"></i>
-              <p>Trending</p>
-            </div>
-            <div class="filter swiper-slide <%= category === 'Rooms' ? 'active' : '' %>"
-              onclick="window.location.href='/listings?category=Rooms'">
-              <i class="fa-solid fa-bed"></i>
-              <p>Rooms</p>
-            </div>
-            <div class="filter swiper-slide <%= category === 'Iconic Cities' ? 'active' : '' %>"
-              onclick="window.location.href='/listings?category=Iconic+Cities'">
-              <i class="fa-solid fa-mountain-city"></i>
-              <p>Iconic Cities</p>
-            </div>
-            <div class="filter swiper-slide <%= category === 'Mountain' ? 'active' : '' %>"
-              onclick="window.location.href='/listings?category=Mountain'">
-              <i class="fa-solid fa-mountain"></i>
-              <p>Mountain</p>
-            </div>
-            <div class="filter swiper-slide <%= category === 'Castles' ? 'active' : '' %>"
-              onclick="window.location.href='/listings?category=Castles'">
-              <i class="fa-brands fa-fort-awesome"></i>
-              <p>Castles</p>
-            </div>
-            <div class="filter swiper-slide <%= category === 'Amazing Pools' ? 'active' : '' %>"
-              onclick="window.location.href='/listings?category=Amazing+Pools'">
-              <i class="fa-solid fa-person-swimming"></i>
-              <p>Amazing Pools</p>
-            </div>
-            <div class="filter swiper-slide <%= category === 'Camping' ? 'active' : '' %>"
-              onclick="window.location.href='/listings?category=Camping'">
-              <i class="fa-solid fa-campground"></i>
-              <p>Camping</p>
-            </div>
-            <div class="filter swiper-slide <%= category === 'Farms' ? 'active' : '' %>"
-              onclick="window.location.href='/listings?category=Farms'">
-              <i class="fa-solid fa-cow"></i>
-              <p>Farms</p>
-            </div>
-            <div class="filter swiper-slide <%= category === 'Arctic' ? 'active' : '' %>"
-              onclick="window.location.href='/listings?category=Arctic'">
-              <i class="fa-regular fa-snowflake"></i>
-              <p>Arctic</p>
-            </div>
-          </div>
+<div class="container-fluid px-lg-4 mt-2 mb-4">
+  <!-- Category Filters & Tax Switch Bar -->
+  <div id="filters-container">
+    <div class="swiper categorySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide filter-item <%= category === 'Trending' ? 'active' : '' %>"
+          onclick="window.location.href='/listings?category=Trending'">
+          <i class="fa-solid fa-fire"></i>
+          <p>Trending</p>
         </div>
-
-        <div class="tax-toggle ms-md-3">
-          <div class="form-check form-switch form-check-reverse">
-            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-            <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
-          </div>
+        <div class="swiper-slide filter-item <%= category === 'Rooms' ? 'active' : '' %>"
+          onclick="window.location.href='/listings?category=Rooms'">
+          <i class="fa-solid fa-bed"></i>
+          <p>Rooms</p>
         </div>
-      </div>
-
-      <div class="row row-cols-xxl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 g-4 mt-2">
-        <% if(allListings.length> 0) { %>
-          <% for(let listing of allListings){ %>
-            <div class="col">
-              <a href="/listings/<%= listing._id %>" class="listing-link">
-                <div class="card h-100 w-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                  <img src="<%= listing.image.url%>" class="card-img-top" alt="listing image"
-                    style="height: 18rem; object-fit: cover;" />
-                  <div class="card-body p-3">
-                    <h5 class="card-title mb-1 fw-bold text-dark">
-                      <%= listing.title%>
-                    </h5>
-                    <p class="card-text text-secondary mb-0">
-                      <span class="fw-bold text-dark">&#8377; <%= listing.price.toLocaleString("en-IN") %></span> /
-                      night
-                      <span class="tax-info ms-2 text-primary font-monospace">+18% GST</span>
-                    </p>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <% } %>
-              <% } else { %>
-                <div class="col-12 col-md-6 col-lg-4 col-xl-3 col-xxl-2 text-center mt-5">
-                  <div class="no-listings-found">
-                    <i class="fa-solid fa-search-minus fa-4x text-secondary mb-3"></i>
-                    <h3 class="text-secondary">No listings found for "<%= category %>"</h3>
-                    <p class="text-muted">Try exploring other categories or check back later.</p>
-                    <a href="/listings" class="btn btn-danger mt-3" style="border-radius: 20px;">Show all listings</a>
-                  </div>
-                </div>
-                <% } %>
+        <div class="swiper-slide filter-item <%= category === 'Iconic Cities' ? 'active' : '' %>"
+          onclick="window.location.href='/listings?category=Iconic+Cities'">
+          <i class="fa-solid fa-mountain-city"></i>
+          <p>Iconic Cities</p>
+        </div>
+        <div class="swiper-slide filter-item <%= category === 'Mountain' ? 'active' : '' %>"
+          onclick="window.location.href='/listings?category=Mountain'">
+          <i class="fa-solid fa-mountain"></i>
+          <p>Mountain</p>
+        </div>
+        <div class="swiper-slide filter-item <%= category === 'Castles' ? 'active' : '' %>"
+          onclick="window.location.href='/listings?category=Castles'">
+          <i class="fa-brands fa-fort-awesome"></i>
+          <p>Castles</p>
+        </div>
+        <div class="swiper-slide filter-item <%= category === 'Amazing Pools' ? 'active' : '' %>"
+          onclick="window.location.href='/listings?category=Amazing+Pools'">
+          <i class="fa-solid fa-person-swimming"></i>
+          <p>Amazing Pools</p>
+        </div>
+        <div class="swiper-slide filter-item <%= category === 'Camping' ? 'active' : '' %>"
+          onclick="window.location.href='/listings?category=Camping'">
+          <i class="fa-solid fa-campground"></i>
+          <p>Camping</p>
+        </div>
+        <div class="swiper-slide filter-item <%= category === 'Farms' ? 'active' : '' %>"
+          onclick="window.location.href='/listings?category=Farms'">
+          <i class="fa-solid fa-cow"></i>
+          <p>Farms</p>
+        </div>
+        <div class="swiper-slide filter-item <%= category === 'Arctic' ? 'active' : '' %>"
+          onclick="window.location.href='/listings?category=Arctic'">
+          <i class="fa-regular fa-snowflake"></i>
+          <p>Arctic</p>
+        </div>
       </div>
     </div>
-  </body>
 
-  <script>
-    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+    <!-- Tax Toggle -->
+    <div class="tax-toggle-box">
+      <div class="form-check form-switch form-check-reverse m-0">
+        <input class="form-check-input text-danger cursor-pointer" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+        <label class="form-check-label fw-semibold text-dark small cursor-pointer" for="flexSwitchCheckDefault">Display total after taxes</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Listings Grid or Premium Empty State -->
+  <% if(allListings && allListings.length > 0) { %>
+    <div class="row row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1 g-4 mt-1">
+      <% for(let listing of allListings){ %>
+        <%
+          let avgRating = "New";
+          if (listing.reviews && listing.reviews.length > 0) {
+            let totalRating = listing.reviews.reduce((sum, rev) => sum + (rev.rating || 5), 0);
+            avgRating = (totalRating / listing.reviews.length).toFixed(1);
+          }
+        %>
+        <div class="col">
+          <div class="card listing-home-card h-100 position-relative">
+            <div class="card-img-wrapper position-relative">
+              <a href="/listings/<%= listing._id %>" class="listing-card-wrapper">
+                <img src="<%= listing.image.url %>" alt="listing_image" loading="lazy" />
+              </a>
+              <button class="wishlist-heart-btn" type="button" title="Toggle Wishlist" onclick="toggleWishlist(event, '<%= listing._id %>')">
+                <i class="<%= (typeof userWishlist !== 'undefined' && userWishlist && userWishlist.includes(listing._id.toString())) ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart' %>"></i>
+              </button>
+              <div class="rating-pill">
+                <i class="fa-solid fa-star text-warning me-1"></i><%= avgRating %>
+                <% if(listing.reviews && listing.reviews.length > 0) { %>
+                  <span class="text-secondary fw-normal ms-1" style="font-size: 0.72rem;">(<%= listing.reviews.length %>)</span>
+                <% } %>
+              </div>
+            </div>
+            <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+              <div class="card-details">
+                <h6 class="card-title-text"><%= listing.title %></h6>
+                <div class="card-subtitle-text">
+                  <%= listing.location %>, <%= listing.country %>
+                </div>
+                <div class="card-price-text">
+                  <span class="fw-bold text-dark">&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : 0 %></span>
+                  <span class="text-secondary small">/ night</span>
+                  <span class="tax-info text-danger fw-semibold small ms-2">+18% GST</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="row w-100 mx-0 justify-content-center py-5 my-2">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="card border-0 shadow-lg rounded-5 overflow-hidden text-center p-4 p-md-5 bg-white position-relative" style="background: linear-gradient(145deg, #ffffff 0%, #fff8f8 100%);">
+          <!-- Animated Top Icon Circle -->
+          <div class="empty-state-avatar mx-auto mb-4 bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 84px; height: 84px; font-size: 2.4rem;">
+            <% if (category === "My Created Listings") { %>
+              <i class="fa-solid fa-house-user"></i>
+            <% } else if (category === "My Saved Stays") { %>
+              <i class="fa-solid fa-heart"></i>
+            <% } else { %>
+              <i class="fa-solid fa-compass"></i>
+            <% } %>
+          </div>
+
+          <!-- Empty State Headline & Subtext -->
+          <% if (category === "My Created Listings") { %>
+            <h2 class="fw-extrabold text-dark mb-2">You haven't listed any stays yet</h2>
+            <p class="text-muted lead fs-6 mb-4 mx-auto" style="max-width: 520px;">
+              Share your unique home, villa, or apartment with travelers around the world and start earning today!
+            </p>
+            <div>
+              <a href="/listings/new" class="btn btn-danger-custom rounded-pill px-4 py-25 fw-bold shadow">
+                <i class="fa-solid fa-plus me-2"></i> Host a New Stay
+              </a>
+            </div>
+          <% } else if (category === "My Saved Stays") { %>
+            <h2 class="fw-extrabold text-dark mb-2">Your Wishlist is Empty</h2>
+            <p class="text-muted lead fs-6 mb-4 mx-auto" style="max-width: 520px;">
+              Save your favorite stays by clicking the heart icon on any stay card. They'll appear here for quick access!
+            </p>
+            <div>
+              <a href="/listings" class="btn btn-danger-custom rounded-pill px-4 py-25 fw-bold shadow">
+                <i class="fa-solid fa-compass me-2"></i> Explore All Listings
+              </a>
+            </div>
+          <% } else { %>
+            <h2 class="fw-extrabold text-dark mb-2">No Stays Found for "<%= category %>"</h2>
+            <p class="text-muted lead fs-6 mb-4 mx-auto" style="max-width: 560px;">
+              We couldn't find any stays in the <strong><%= category %></strong> category right now. Try exploring other popular categories or create a new listing!
+            </p>
+
+            <!-- Quick Category Recommendation Pills -->
+            <div class="p-3 bg-light rounded-4 mb-4 border d-inline-block text-start max-w-100">
+              <span class="fw-semibold text-dark small d-block mb-2 text-center text-md-start">
+                <i class="fa-solid fa-fire text-danger me-1"></i> Popular Category Suggestions:
+              </span>
+              <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-2">
+                <a href="/listings?category=Trending" class="badge bg-white text-dark border px-3 py-2 rounded-pill text-decoration-none shadow-sm hover-lift">🔥 Trending</a>
+                <a href="/listings?category=Rooms" class="badge bg-white text-dark border px-3 py-2 rounded-pill text-decoration-none shadow-sm hover-lift">🛏️ Rooms</a>
+                <a href="/listings?category=Iconic Cities" class="badge bg-white text-dark border px-3 py-2 rounded-pill text-decoration-none shadow-sm hover-lift">🏙️ Iconic Cities</a>
+                <a href="/listings?category=Mountain" class="badge bg-white text-dark border px-3 py-2 rounded-pill text-decoration-none shadow-sm hover-lift">🏔️ Mountain</a>
+                <a href="/listings?category=Amazing Pools" class="badge bg-white text-dark border px-3 py-2 rounded-pill text-decoration-none shadow-sm hover-lift">🏊 Amazing Pools</a>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+              <a href="/listings" class="btn btn-danger-custom rounded-pill px-4 py-25 fw-bold shadow">
+                <i class="fa-solid fa-compass me-2"></i> Explore All Stays
+              </a>
+              <a href="/listings/new" class="btn btn-outline-dark rounded-pill px-4 py-25 fw-bold">
+                <i class="fa-solid fa-plus me-1"></i> Become a Host
+              </a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% } %>
+  </div>
+</div>
+
+<script>
+  async function toggleWishlist(event, listingId) {
+    event.preventDefault();
+    event.stopPropagation();
+    <% if (!currUser) { %>
+      window.location.href = "/login";
+      return;
+    <% } %>
+    
+    try {
+      const btn = event.currentTarget;
+      const icon = btn.querySelector("i");
+      btn.classList.add("pulse-heart");
+      setTimeout(() => btn.classList.remove("pulse-heart"), 350);
+
+      const res = await fetch(`/listings/${listingId}/like`, { method: "POST" });
+      const data = await res.json();
+      if (data.success) {
+        if (data.liked) {
+          icon.className = "fa-solid fa-heart text-danger";
+        } else {
+          icon.className = "fa-regular fa-heart";
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get("filter") === "liked") {
+            const col = btn.closest(".col");
+            if (col) {
+              col.style.transition = "all 0.3s ease";
+              col.style.opacity = "0";
+              col.style.transform = "scale(0.85)";
+              setTimeout(() => {
+                col.remove();
+                const remaining = document.querySelectorAll(".row-cols-xl-3 .col");
+                if (remaining.length === 0) {
+                  window.location.reload();
+                }
+              }, 300);
+            }
+          }
+        }
+        const navCount = document.getElementById("nav-wishlist-count");
+        if (navCount) {
+          navCount.innerText = data.wishlistCount;
+        }
+      }
+    } catch (err) {
+      console.error("Error toggling wishlist:", err);
+    }
+  }
+
+  let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+  if (taxSwitch) {
     taxSwitch.addEventListener("click", () => {
       let taxInfo = document.getElementsByClassName("tax-info");
       for (let info of taxInfo) {
-        if (info.style.display != "inline") {
+        if (info.style.display !== "inline") {
           info.style.display = "inline";
         } else {
           info.style.display = "none";
         }
       }
     });
+  }
 
-    var swiper = new Swiper(".mySwiper", {
-      slidesPerView: "auto",
-      spaceBetween: 20,
-      freeMode: true,
-      mousewheel: true,
-    });
-  </script>
-
-  <!-- https://cdn.britannica.com/96/115096-050-5AFDAF5D/Bellagio-Hotel-Casino-Las-Vegas.jpg -->
+  var swiper = new Swiper(".categorySwiper", {
+    slidesPerView: "auto",
+    spaceBetween: 15,
+    freeMode: true,
+    mousewheel: true,
+  });
+</script>

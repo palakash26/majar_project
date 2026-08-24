@@ -1,69 +1,143 @@
-<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="/listings">
-      <i class="fa-solid fa-compass" style="color: #fe424d; font-size: 2rem; margin-right: 0.5rem;"></i>
-      <span style="font-size: 1.5rem; font-weight: bold; color: #333;">Wanderlust</span>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
+<nav class="navbar navbar-expand-lg sticky-top custom-navbar">
+  <div class="container">
+    <!-- Brand Logo -->
+    <a class="navbar-brand d-flex align-items-center me-3" href="/listings">
+      <div class="brand-icon-wrapper me-2">
+        <i class="fa-solid fa-compass brand-icon"></i>
       </div>
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search" method="GET" action="/listings">
-          <input class="form-control me-2 search-in" type="search" placeholder="Search destination" aria-label="Search"
-            name="q" />
-          <button class="btn search-btn" type="submit">
-            <i class="fas fa-search"></i> Search
-          </button>
+      <span class="brand-text">Wanderlust</span>
+    </a>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="navbar-toggler custom-toggler border-0" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars-staggered text-dark fs-4"></i>
+    </button>
+
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <!-- Search Bar Capsule -->
+      <div class="navbar-nav mx-auto my-2 my-lg-0 search-container-wrapper w-100">
+        <form class="d-flex search-form w-100" role="search" method="GET" action="/listings">
+          <div class="search-input-capsule w-100">
+            <i class="fa-solid fa-magnifying-glass search-capsule-icon"></i>
+            <input class="form-control search-capsule-input" type="search" placeholder="Search destinations, stays..."
+              aria-label="Search" name="q" autocomplete="off" spellcheck="false" />
+            <button class="btn search-capsule-btn" type="submit" title="Search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
         </form>
       </div>
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/listings/new">Create new listings</a>
+
+      <!-- Right Navigation Actions -->
+      <div class="navbar-nav ms-auto align-items-lg-center gap-2">
+        <a class="nav-link nav-item-link px-3 py-2" href="/listings">
+          <i class="fa-solid fa-globe me-1"></i> Explore
+        </a>
+        <a class="nav-link host-badge-btn px-3 py-2 me-lg-2" href="/listings/new">
+          <i class="fa-solid fa-circle-plus me-1 text-danger"></i> Become a Host
+        </a>
+
+        <!-- User Authentication Links & Profile Dropdown -->
         <% if (!currUser) { %>
-          <a class="nav-link" href="/signup"><b>SignUp</b></a>
-          <a class="nav-link" href="/login"><b>Login</b></a>
+          <a class="btn btn-outline-dark rounded-pill px-3 py-1 fw-semibold me-1" href="/login">
+            <i class="fa-solid fa-right-to-bracket me-1"></i> Log In
+          </a>
+          <a class="btn btn-danger-custom rounded-pill px-3 py-1 fw-semibold" href="/signup">
+            <i class="fa-solid fa-user-plus me-1"></i> Sign Up
+          </a>
           <% } else { %>
-            <a class="nav-link" href="/logout"><b>LogOut</b></a>
+            <div class="dropdown">
+              <button class="btn user-profile-pill dropdown-toggle d-flex align-items-center justify-content-between gap-2" type="button"
+                id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="avatar-circle">
+                    <i class="fa-solid fa-user text-white"></i>
+                  </div>
+                  <span class="user-name-text fw-semibold text-truncate" style="max-width: 140px;">
+                    <%= currUser.username %>
+                  </span>
+                </div>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end custom-dropdown-menu shadow-lg border-0 p-3"
+                aria-labelledby="userMenuButton" style="min-width: 260px;">
+
+                <!-- User Details Header -->
+                <li class="px-2 py-1">
+                  <div class="d-flex align-items-center mb-2">
+                    <div class="avatar-circle bg-danger text-white me-3"
+                      style="width: 40px; height: 40px; font-size: 1rem;">
+                      <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                      <h6 class="fw-bold text-dark mb-0">
+                        <%= currUser.username %>
+                      </h6>
+                      <small class="text-muted d-block text-truncate" style="max-width: 170px;">
+                        <%= currUser.email || 'Member' %>
+                      </small>
+                    </div>
+                  </div>
+                </li>
+
+                <!-- Real-Time User Statistics Badges -->
+                <li class="my-2">
+                  <div class="row g-2 text-center bg-light rounded-3 p-2 mx-0">
+                    <div class="col-6 border-end">
+                      <a href="/listings?filter=mylistings" class="text-decoration-none text-dark d-block">
+                        <small class="text-muted d-block" style="font-size: 0.72rem;">My Listings</small>
+                        <span class="fw-bold text-dark">
+                          <%= (typeof userListingsCount !=='undefined' ) ? userListingsCount : 0 %>
+                        </span>
+                      </a>
+                    </div>
+                    <div class="col-6">
+                      <a href="/listings?filter=liked" class="text-decoration-none text-danger d-block">
+                        <small class="text-muted d-block" style="font-size: 0.72rem;">Liked Stays</small>
+                        <span class="fw-bold text-danger" id="nav-wishlist-count">
+                          <%= (typeof userWishlistCount !=='undefined' ) ? userWishlistCount : 0 %>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <hr class="dropdown-divider my-2">
+                </li>
+
+                <!-- Actions -->
+                <li>
+                  <a class="dropdown-item py-2 rounded-2" href="/listings?filter=mylistings">
+                    <i class="fa-solid fa-house-user text-primary me-2"></i> My Created Listings
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item py-2 rounded-2" href="/listings?filter=liked">
+                    <i class="fa-solid fa-heart text-danger me-2"></i> My Liked Stays
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item py-2 rounded-2" href="/listings/new">
+                    <i class="fa-solid fa-plus text-success me-2"></i> Host a New Stay
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item py-2 rounded-2" href="/contact">
+                    <i class="fa-solid fa-paper-plane text-info me-2"></i> Real-Time Mailer Concierge
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item py-2 rounded-2 text-danger fw-semibold" href="/logout">
+                    <i class="fa-solid fa-right-from-bracket me-2"></i> Log Out
+                  </a>
+                </li>
+              </ul>
+            </div>
             <% } %>
       </div>
     </div>
   </div>
 </nav>
-
-<style>
-  .search-btn {
-    background-color: #fe424d;
-    color: aliceblue;
-    border-radius: 25px;
-    padding: 0 1rem;
-  }
-
-  .search-btn:hover {
-    background-color: #e63946;
-    color: aliceblue;
-  }
-
-  .search-btn i {
-    display: inline;
-    margin-right: 0.5rem;
-  }
-
-  .search-in {
-    border-radius: 25px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 768px) {
-    .search-in {
-      padding: 0.5rem 1rem;
-    }
-
-    .navbar-nav {
-      text-align: center;
-    }
-  }
-</style>

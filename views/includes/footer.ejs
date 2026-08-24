@@ -1,17 +1,155 @@
-<footer class="footer">
+<footer class="custom-footer pt-5 pb-4 mt-5">
+    <div class="container">
+        <!-- Top Footer Columns -->
+        <div class="row g-4 mb-5">
+            <!-- Column 1: Brand & Info -->
+            <div class="col-lg-4 col-md-6">
+                <div class="footer-brand-section pe-lg-4">
+                    <a href="/listings" class="d-flex align-items-center mb-3 text-decoration-none">
+                        <i class="fa-solid fa-compass brand-icon me-2"></i>
+                        <span class="footer-brand-text">Wanderlust</span>
+                    </a>
+                    <p class="footer-desc text-muted mb-3">
+                        Discover extraordinary stays, luxury villas, beachfront retreats, and unforgettable travel
+                        experiences around the world.
+                    </p>
 
-    <div class="f-info">
-        <div class="f-info-socials">
-            <i class="fa-brands fa-instagram"></i>
-            <i class="fa-brands fa-facebook"></i>
-            <i class="fa-brands fa-twitter"></i>
+                    <!-- Cron Keepalive Server Status Pill -->
+                    <div class="cron-status-badge d-inline-flex align-items-center mb-3 px-3 py-1 rounded-pill">
+                        <span class="status-pulse me-2"></span>
+                        <small class="fw-semibold text-dark">System Active (10-Min Auto-Ping)</small>
+                    </div>
+
+                    <!-- Social Media Icons -->
+                    <div class="footer-socials d-flex gap-2 mt-2">
+                        <a href="https://www.instagram.com/_pal_akash26/" target="_blank" class="social-icon-btn"
+                            title="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" class="social-icon-btn" title="Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://x.com/AkashPa42525537" target="_blank" class="social-icon-btn"
+                            title="Twitter / X">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/akash-pal-29b198279/" target="_blank"
+                            class="social-icon-btn" title="LinkedIn">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://github.com/palakash26/" target="_blank" class="social-icon-btn" title="GitHub">
+                            <i class="fa-brands fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2: Support & Help -->
+            <div class="col-lg-2 col-md-6 col-6">
+                <h6 class="footer-heading mb-3">Support</h6>
+                <ul class="list-unstyled footer-links mb-0">
+                    <li><a href="/help">Help Center</a></li>
+                    <li><a href="/aircover">AirCover & Safety</a></li>
+                    <li><a href="/anti-discrimination">Anti-discrimination</a></li>
+                    <li><a href="/disability-support">Disability Support</a></li>
+                    <li><a href="/cancellation-options">Cancellation Options</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Hosting -->
+            <div class="col-lg-3 col-md-6 col-6">
+                <h6 class="footer-heading mb-3">Hosting</h6>
+                <ul class="list-unstyled footer-links mb-0">
+                    <li><a href="/listings/new">Host your home</a></li>
+                    <li><a href="/host-cover">Wanderlust Cover for Hosts</a></li>
+                    <li><a href="/hosting-resources">Hosting Resources</a></li>
+                    <li><a href="/community-forum">Community Forum</a></li>
+                    <li><a href="/host-responsibly">Host Responsibly</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4: Company & Newsletter -->
+            <div class="col-lg-3 col-md-6">
+                <h6 class="footer-heading mb-3">Stay Connected</h6>
+                <p class="small text-muted mb-3">Subscribe to get secret travel deals & curated stay recommendations.
+                </p>
+
+                <form class="newsletter-form mb-3" onsubmit="handleNewsletterSubscribe(event)">
+                    <div class="input-group">
+                        <input type="email" id="newsletter-email-input"
+                            class="form-control rounded-start-pill newsletter-input" placeholder="Your email address"
+                            required>
+                        <button class="btn btn-danger-custom rounded-end-pill px-3" type="submit"
+                            id="newsletter-submit-btn">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <script>
+                    async function handleNewsletterSubscribe(event) {
+                        event.preventDefault();
+                        const emailInput = document.getElementById("newsletter-email-input");
+                        const btn = document.getElementById("newsletter-submit-btn");
+                        const email = emailInput.value.trim();
+
+                        if (!email) return;
+
+                        btn.disabled = true;
+                        btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+
+                        try {
+                            const res = await fetch("/subscribe", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ email })
+                            });
+                            const data = await res.json();
+                            btn.disabled = false;
+                            btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i>`;
+
+                            if (data.success) {
+                                emailInput.value = "";
+                                showCustomToast(data.message, "success");
+                            } else {
+                                showCustomToast(data.message, "error");
+                            }
+                        } catch (err) {
+                            btn.disabled = false;
+                            btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i>`;
+                            showCustomToast("Subscription failed. Please try again.", "error");
+                        }
+                    }
+                </script>
+
+                <div class="d-flex align-items-center gap-3 text-muted small mt-2">
+                    <span><i class="fa-solid fa-globe me-1"></i> English (IN)</span>
+                    <span><i class="fa-solid fa-indian-rupee-sign me-1"></i> INR</span>
+                </div>
+            </div>
         </div>
-        <div class="f-info-brand"> &copy; Wanderlust Private Limited</div>
-        <div>Code planned by Akash</div>
-        <div class="f-info-links">
-            <a href="privacy">Privacy</a>
-            <a href="/terms">Terms</a>
+
+        <!-- Divider -->
+        <hr class="footer-divider my-4">
+
+        <!-- Bottom Footer Bar -->
+        <div class="row align-items-center copyright-row">
+            <div class="col-md-7 text-center text-md-start mb-2 mb-md-0">
+                <p class="mb-0 text-muted small">
+                    &copy; <%= new Date().getFullYear() %> <strong>Wanderlust Private Limited</strong>. All rights
+                        reserved.
+                        <span class="mx-1 d-none d-sm-inline">•</span>
+                        <span class="d-block d-sm-inline mt-1 mt-sm-0">Crafted with <i
+                                class="fa-solid fa-heart text-danger"></i> by <strong>Akash</strong></span>
+                </p>
+            </div>
+            <div class="col-md-5 text-center text-md-end">
+                <div class="footer-sub-links d-inline-flex gap-3 small">
+                    <a href="/privacy" class="text-decoration-none text-muted">Privacy Policy</a>
+                    <a href="/terms" class="text-decoration-none text-muted">Terms of Service</a>
+                    <a href="/listings" class="text-decoration-none text-muted">Sitemap</a>
+                </div>
+            </div>
         </div>
     </div>
-
 </footer>

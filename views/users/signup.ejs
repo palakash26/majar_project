@@ -1,38 +1,64 @@
 <% layout("/layouts/boilerplate") %>
 
-    <div class="row mb-3 mt-3">
-        <h1 class="col-6 offset-3 mb-2">SignUp on wanderlust.</h1>
-        <div class="col-6 offset-3">
-            <!-- <form action="/signup" method="POST" class="needs-validation" novalidate> -->
-                <form action="/signup" method="POST" class="needs-validation" novalidate>
+<div class="row justify-content-center align-items-center my-5">
+    <div class="col-xl-4 col-lg-5 col-md-7 col-sm-10">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white p-4 p-md-5">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <div class="auth-icon-circle bg-danger-subtle text-danger mx-auto mb-3 d-flex align-items-center justify-content-center rounded-circle" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h3 class="fw-bold text-dark mb-1">Join Wanderlust</h3>
+                <p class="text-muted small">Create an account to explore & host unique stays</p>
+            </div>
+
+            <!-- Signup Form -->
+            <form action="/signup" method="POST" class="needs-validation" novalidate>
                 <div class="mb-3">
-                    <label for="username" class="form-label">Username:</label>
-                    <input type="text" placeholder="Enter your name..." id="username" name="username"
-                        class="form-control" autocomplete="given-name" required>
-                    <div class="valid-feedback">
-                        Looks good!
+                    <label for="username" class="form-label fw-semibold text-dark small">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3 text-secondary">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" placeholder="Choose a username" id="username" name="username" class="form-control bg-light border-start-0 rounded-end-pill py-2" autocomplete="username" required>
+                        <div class="invalid-feedback ps-2">Please choose a username.</div>
                     </div>
                 </div>
+
                 <div class="mb-3">
-                    <!-- <label for="email" class="form-label">Eamil:</label> -->
-                    <label for="email" class="form-label">Email:</label>
-                    <input type="email" placeholder="Enter your email..." id="email" name="email" class="form-control"
-                    autocomplete="off"  required>
-                    <div class="invalid-feedback">
-                        Please enter a valid email address.
-                    </div>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password:</label>
-                    <!-- <input type="password" placeholder="Enter your password..." id="password" name="Password"
-                    autocomplete="off" class="form-control" > -->
-                    <input type="password" placeholder="Enter your password..." id="password" name="password" autocomplete="off" class="form-control">
-                    <div class="invalid-feedback">
-                        Please Enter the password!
+                    <label for="email" class="form-label fw-semibold text-dark small">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3 text-secondary">
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        <input type="email" placeholder="name@example.com" id="email" name="email" class="form-control bg-light border-start-0 rounded-end-pill py-2" autocomplete="email" required>
+                        <div class="invalid-feedback ps-2">Please enter a valid email address.</div>
                     </div>
                 </div>
-                <button class="btn btn-success">SignUp</button>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold text-dark small">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3 text-secondary">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" placeholder="Create a secure password" id="password" name="password" autocomplete="new-password" class="form-control bg-light border-start-0 rounded-end-pill py-2" required>
+                        <div class="invalid-feedback ps-2">Please enter a password.</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-danger-custom w-100 rounded-pill py-25 fw-bold shadow-sm mb-3">
+                    <i class="fa-solid fa-user-plus me-2"></i> Create Account
+                </button>
             </form>
+
+            <!-- Footer Switch Link -->
+            <div class="text-center border-top pt-3 mt-2">
+                <p class="text-muted small mb-0">
+                    Already have an account? 
+                    <a href="/login" class="text-danger fw-bold text-decoration-none ms-1">Log In</a>
+                </p>
+            </div>
         </div>
     </div>
+</div>
