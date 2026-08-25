@@ -11,11 +11,11 @@ function initKeepAliveCron(serverPort = 3000) {
   const pingServer = () => {
     // Determine target URL from environment variables or fallback to local URL
     const targetUrl =
-      process.env.RENDER_EXTERNAL_URL ||
       process.env.APP_URL ||
+      process.env.RENDER_EXTERNAL_URL ||
       process.env.SERVER_URL ||
       process.env.URL ||
-      `http://localhost:${serverPort}`;
+      "https://tripora-lemon.vercel.app";
 
     const pingEndpoint = `${targetUrl.replace(/\/$/, "")}/ping`;
     const protocol = pingEndpoint.startsWith("https") ? https : http;
